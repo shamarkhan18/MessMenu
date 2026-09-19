@@ -146,7 +146,21 @@ This creates a simple feedback loop between students and mess management.
 * **DynamoDB Streams + Lambda** for event-driven precomputation of trend data at larger scale
 
 ---
+## 📸 Screenshots
 
+### Main Menu
+![MessMenu Main Menu](screenshots/home.png)
+
+### Meal Rating
+![Meal Rating](screenshots/rating.png)
+
+### console
+![console page](screenshots/console.png)
+
+## 🎥 Demo
+
+[▶️ Watch the 30-second demo](screenshots/demo.mp4)
+---
 ## Demo Flow
 
 1. Open the MessMenu web app.
