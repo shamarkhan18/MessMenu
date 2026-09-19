@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MessMenu</title>
+<style>
+  :root {
+    --primary: #ff6b35;
+    --primary-light: #fff0e8;
+    --bg: #faf7f4;
+    --card: #ffffff;
+    --text: #2b2b2b;
+    --muted: #8a8a8a;
+    --border: #f0e6db;
+    --star: #ffb020;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    padding: 0 0 40px;
+  }
+  .wrap { max-width: 480px; margin: 0 auto; padding: 0 16px; }
+
+  .hero {
+    background: linear-gradient(135deg, var(--primary), #ff8c5a);
+    color: white;
+    padding: 32px 20px 24px;
+    text-align: center;
+    border-radius: 0 0 24px 24px;
+    margin-bottom: -20px;
+  }
+  .hero h1 { font-size: 26px; margin-bottom: 4px; }
+  .hero p { font-size: 13px; opacity: 0.9; }
+
+  .date-nav {
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 4px 16px rgba(255,107,53,0.15);
+    margin: 20px 16px 0;
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+    z-index: 2;
+  }
+  .date-nav button.arrow {
+    background: var(--primary-light);
+    color: var(--primary);
+    border: none;
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .date-nav .date-label { text-align: center; }
+  .date-nav .date-label .day { font-size: 12px; color: var(--muted); }
+  .date-nav .date-label .full { font-size: 15px; font-weight: 600; margin-top: 2px; }
+
+  .section-title {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    color: var(--muted);
+    margin: 28px 0 12px 4px;
+    text-transform: uppercase;
+  }
+
+  .menu-card {
+    background: var(--card);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+  }
+  .meal-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 16px 18px;
+    border-bottom: 1px solid var(--border);
+  }
+  .meal-row:last-child { border-bottom: none; }
+  .meal-icon { font-size: 20px; }
+  .meal-name { font-size: 12px; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.5px; }
+  .meal-items { font-size: 14px; margin-top: 3px; color: var(--text); }
+  .empty-state { text-align: center; padding: 30px; color: var(--muted); font-size: 14px; }
+
+  .card {
+    background: var(--card);
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+  }
+
+  select, textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    font-size: 14px;
+    font-family: inherit;
+    background: var(--bg);
+  }
+  label { display: block; font-size: 12px; color: var(--muted); margin: 14px 0 6px; }
+  label:first-child { margin-top: 0; }
+
+  .stars {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    margin: 16px 0;
+  }
+  .star {
+    font-size: 32px;
+    cursor: pointer;
+    color: #e5e0da;
+    user-select: none;
+    transition: transform 0.1s;
+  }
+  .star.active { color: var(--star); }
+  .star:active { transform: scale(1.2); }
+
+  button.submit-btn {
+    width: 100%;
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 13px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 16px;
+  }
+  button.submit-btn:disabled { opacity: 0.5; }
+
+  .status {
+    font-size: 13px;
+    margin-top: 12px;
+    padding: 10px;
+    border-radius: 8px;
+    text-align: center;
+  }
+  .status.success { background: #e6f7ed; color: #1a7a3d; }
+  .status.error { background: #fde8e8; color: #c0392b; }
+  .status.loading { color: var(--muted); background: transparent; }
+
+  .trend-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--border);
+  }
+  .trend-row:last-child { border-bottom: none; }
+  .trend-meal { font-size: 14px; font-weight: 600; text-transform: capitalize; }
+  .trend-score { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--muted); }
+  .trend-score .stars-mini { color: var(--star); font-size: 13px; }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <h1>🍽️ MessMenu</h1>
+  <p>Know what's cooking. Rate what you eat.</p>
+</div>
+
+<div class="wrap">
+  <div class="date-nav">
+    <button class="arrow" onclick="changeDate(-1)">◀</button>
+    <div class="date-label">
+      <div class="day" id="dayLabel">Today</div>
+      <div class="full" id="dateLabel">—</div>
+    </div>
+    <button class="arrow" onclick="changeDate(1)">▶</button>
+  </div>
+
+  <div class="section-title">Today's Menu</div>
+  <div class="menu-card" id="menuCard">
+    <div class="empty-state">Loading menu...</div>
+  </div>
+
+  <div class="section-title">How Was Your Meal?</div>
+  <div class="card">
+    <label>Meal</label>
+    <select id="ratingMealType">
+      <option value="breakfast">🌅 Breakfast</option>
+      <option value="lunch" selected>☀️ Lunch</option>
+      <option value="snacks">☕ Snacks</option>
+      <option value="dinner">🌙 Dinner</option>
+    </select>
+
+    <div class="stars" id="stars">
+      <span class="star" data-value="1">★</span>
+      <span class="star" data-value="2">★</span>
+      <span class="star" data-value="3">★</span>
+      <span class="star" data-value="4">★</span>
+      <span class="star" data-value="5">★</span>
+    </div>
+
+    <label>Comment (optional)</label>
+    <textarea id="comment" rows="2" placeholder="Tell us what you thought..."></textarea>
+
+    <button class="submit-btn" onclick="submitRating()">Submit Rating</button>
+    <div id="ratingResult"></div>
+  </div>
+
+  <div class="section-title">📊 Meal Trends</div>
+  <div class="menu-card" id="trendsCard">
+    <div class="empty-state">No trend data yet — be the first to rate!</div>
+  </div>
+</div>
+
+<script>
+  // 👉 UPDATE THIS with your actual API Gateway Invoke URL
+  const API_URL = "https://9969badyh0.execute-api.us-east-1.amazonaws.com";
+
+  let selectedRating = 0;
+  let currentDate = new Date();
+
+  // Auto-generate a demo student ID and persist it for this browser session
+  let studentId = sessionStorage.getItem('demoStudentId');
+  if (!studentId) {
+    studentId = 'guest' + Math.floor(1000 + Math.random() * 9000);
+    sessionStorage.setItem('demoStudentId', studentId);
+  }
+
+  function formatDate(d) {
+    return d.toISOString().split('T')[0]; // YYYY-MM-DD
+  }
+
+  function formatDisplayDate(d) {
+    return d.toLocaleDateString('en-US', { day: 'numeric', month: 'short' });
+  }
+
+  function updateDateLabel() {
+    const today = new Date();
+    const isToday = formatDate(currentDate) === formatDate(today);
+    document.getElementById('dayLabel').textContent = isToday ? 'Today' : currentDate.toLocaleDateString('en-US', { weekday: 'long' });
+    document.getElementById('dateLabel').textContent = formatDisplayDate(currentDate);
+  }
+
+  function changeDate(delta) {
+    currentDate.setDate(currentDate.getDate() + delta);
+    updateDateLabel();
+    fetchMenu();
+  }
+
+  async function fetchMenu() {
+    const date = formatDate(currentDate);
+    const menuCard = document.getElementById('menuCard');
+    menuCard.innerHTML = '<div class="empty-state">Loading menu...</div>';
+
+    try {
+      const res = await fetch(`${API_URL}/menu?date=${date}`);
+      const data = await res.json();
+
+      if (!data || Object.keys(data).length === 0) {
+        menuCard.innerHTML = '<div class="empty-state">No menu posted for this day yet.</div>';
+        return;
+      }
+
+      const meals = [
+        { key: 'breakfast', icon: '🌅', label: 'Breakfast' },
+        { key: 'lunch', icon: '☀️', label: 'Lunch' },
+        { key: 'snacks', icon: '☕', label: 'Snacks' },
+        { key: 'dinner', icon: '🌙', label: 'Dinner' },
+      ];
+
+      menuCard.innerHTML = meals.map(m => `
+        <div class="meal-row">
+          <div class="meal-icon">${m.icon}</div>
+          <div>
+            <div class="meal-name">${m.label}</div>
+            <div class="meal-items">${data[m.key] || '—'}</div>
+          </div>
+        </div>
+      `).join('');
+    } catch (err) {
+      menuCard.innerHTML = '<div class="empty-state">Couldn\'t load menu. Check connection.</div>';
+      console.error(err);
+    }
+  }
+
+  document.querySelectorAll('.star').forEach(star => {
+    star.addEventListener('click', () => {
+      selectedRating = parseInt(star.dataset.value);
+      document.querySelectorAll('.star').forEach(s => {
+        s.classList.toggle('active', parseInt(s.dataset.value) <= selectedRating);
+      });
+    });
+  });
+
+  async function submitRating() {
+    const date = formatDate(currentDate);
+    const mealType = document.getElementById('ratingMealType').value;
+    const comment = document.getElementById('comment').value.trim();
+    const resultDiv = document.getElementById('ratingResult');
+
+    if (selectedRating === 0) {
+      resultDiv.innerHTML = '<p class="status error">Tap a star to rate first.</p>';
+      return;
+    }
+
+    resultDiv.innerHTML = '<p class="status loading">Submitting...</p>';
+
+    try {
+      const res = await fetch(`${API_URL}/ratings`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          dateMeal: `${date}#${mealType}`,
+          studentId: studentId,
+          rating: selectedRating,
+          comment: comment
+        })
+      });
+      const data = await res.json();
+
+      if (res.ok) {
+        resultDiv.innerHTML = '<p class="status success">Thanks for rating! 🎉</p>';
+        selectedRating = 0;
+        document.querySelectorAll('.star').forEach(s => s.classList.remove('active'));
+        document.getElementById('comment').value = '';
+      } else {
+        resultDiv.innerHTML = `<p class="status error">Error: ${data.message || 'Submission failed'}</p>`;
+      }
+    } catch (err) {
+      resultDiv.innerHTML = '<p class="status error">Couldn\'t submit. Check connection.</p>';
+      console.error(err);
+    }
+  }
+
+  // Init
+  updateDateLabel();
+  fetchMenu();
+</script>
+
+</body>
+</html>
