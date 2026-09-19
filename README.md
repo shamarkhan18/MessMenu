@@ -1,4 +1,4 @@
-# 🍽️ MessMenu
+# MessMenu
 
 **Know what's cooking. Rate what you eat.**
 
@@ -6,7 +6,7 @@ MessMenu is a serverless web app that helps hostel/mess students check daily mea
 
 ---
 
-## 🧩 Problem It Solves
+## Problem It Solves
 
 Hostel mess menus are often shared informally through WhatsApp groups, printed notices, or word of mouth. Students may have no convenient way to access the menu or provide structured feedback about individual meals.
 
@@ -21,7 +21,7 @@ This creates a simple feedback loop between students and mess management.
 
 ---
 
-## ✨ Features
+## Features
 
 * 📅 **Date-based menu browsing** — navigate between days and view the corresponding menu
 * ⭐ **Meal-wise star ratings** — rate individual meals with an optional comment
@@ -31,7 +31,7 @@ This creates a simple feedback loop between students and mess management.
 
 ---
 
-## 🏗️ AWS Architecture
+## AWS Architecture
 
 ```text
                  ┌──────────────────┐
@@ -67,7 +67,7 @@ This creates a simple feedback loop between students and mess management.
 
 ---
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 | Layer    | Technology                       |
 | -------- | -------------------------------- |
@@ -79,7 +79,7 @@ This creates a simple feedback loop between students and mess management.
 
 ---
 
-## 🔌 API Endpoints
+## API Endpoints
 
 | Method | Route                                 | Description                                                             |
 | ------ | ------------------------------------- | ----------------------------------------------------------------------- |
@@ -93,7 +93,7 @@ This creates a simple feedback loop between students and mess management.
 
 ---
 
-## ⚙️ How It Works
+## How It Works
 
 1. The frontend is hosted as a static website on **Amazon S3**.
 2. The browser communicates directly with **Amazon API Gateway** using JavaScript `fetch()` requests.
@@ -106,7 +106,7 @@ This creates a simple feedback loop between students and mess management.
 
 ---
 
-## 🗄️ DynamoDB Design
+## DynamoDB Design
 
 ### MessMenu
 
@@ -137,7 +137,7 @@ This creates a simple feedback loop between students and mess management.
 
 ---
 
-## 🔭 Future Scope
+## Future Scope
 
 * **Admin panel** for mess staff to add and edit menus
 * **Amazon Cognito authentication** for verified student accounts
@@ -147,7 +147,7 @@ This creates a simple feedback loop between students and mess management.
 
 ---
 
-## 🎥 Demo Flow
+## Demo Flow
 
 1. Open the MessMenu web app.
 2. Navigate to a date with available menu data.
@@ -159,7 +159,7 @@ This creates a simple feedback loop between students and mess management.
 
 ---
 
-## 📦 Deployment
+## Deployment
 
 ### Frontend
 
@@ -179,7 +179,7 @@ The Lambda functions access DynamoDB through their IAM execution roles.
 
 ---
 
-## 🚀 Live Demo
+## Live Demo
 
 **MessMenu:**
 http://messmenu-api-samk18.s3-website-us-east-1.amazonaws.com
